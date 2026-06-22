@@ -39,7 +39,7 @@ def main():
     out["source_url"] = URL
     out["license"] = "apache-2.0"
     out["id"] = [f"yo_oweyor_{i+1:05d}" for i in range(len(out))]
-    save(out, "processed/oweyor.csv")
+    save(out, "data/processed/oweyor.csv")
 
 
 if __name__ == "__main__":

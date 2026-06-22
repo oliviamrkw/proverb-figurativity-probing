@@ -11,11 +11,11 @@ import glob
 import pandas as pd
 from proverb_schema import COLUMNS, validate
 
-OUT = "processed/master.csv"
+OUT = "data/processed/master.csv"
 
 
 def main():
-    files = [f for f in sorted(glob.glob("processed/*.csv")) if not f.endswith("master.csv")]
+    files = [f for f in sorted(glob.glob("data/processed/*.csv")) if not (f.endswith("master.csv") or (f.endswith("master_translated.csv")))]
     if not files:
         print("No processed/*.csv files found. Run the read_*.py scripts first.")
         return

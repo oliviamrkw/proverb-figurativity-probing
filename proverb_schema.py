@@ -13,6 +13,7 @@ You normally never run this file directly — the reader scripts use it.
 import os
 import unicodedata
 import pandas as pd
+import re
 
 # The 15 columns you specified, in fixed order.
 COLUMNS = [
@@ -35,11 +36,18 @@ COLUMNS = [
 
 
 def clean(text) -> str:
-    """Normalize unicode (NFC) and strip whitespace. Never changes wording.
-    This is the same fix that prevents the 'funny characters' problem."""
+    """Normalize unicode (NFC) and normalize whitespace. Never changes wording.
+ 
+    - NFC normalization fixes the 'funny characters' problem.
+    - Collapsing whitespace turns any run of spaces, tabs, or line breaks
+      (\\r, \\n, \\t, repeated spaces) into a single space, then strips the
+      ends. This keeps every proverb on one line with single spacing, which
+      some source datasets (e.g. ProverbEval) do not guarantee.
+    """
     if text is None:
         return ""
-    return unicodedata.normalize("NFC", str(text)).strip()
+    text = unicodedata.normalize("NFC", str(text))
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def blank_frame(n: int) -> pd.DataFrame:
