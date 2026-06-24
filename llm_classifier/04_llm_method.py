@@ -41,8 +41,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))          # llm_classifier/
 ROOT = os.path.dirname(HERE)
 MASTER = os.path.join(ROOT, "data", "processed", "master.csv")
 SPLIT_DIR = os.path.join(ROOT, "embedding_classifier")     # shared split
-TEST = os.path.join(SPLIT_DIR, "test_indices.npy")
-TRAIN = os.path.join(SPLIT_DIR, "train_indices.npy")
+TEST = os.path.join(SPLIT_DIR, "npy", "test_indices.npy")
+TRAIN = os.path.join(SPLIT_DIR, "npy", "train_indices.npy")
 OLLAMA_URL = "http://localhost:11434/api/generate"
 SEED = 42
 
@@ -177,9 +177,7 @@ def main():
     shots_block = few_shot_block(maps, args.variant, args.shots)
     cond = f"{args.shots}-shot" if args.shots > 0 else "zero-shot"
     tag = f"{args.model.replace(':','_')}_{args.variant}_{cond}"
-    print(f"model={args.model} variant={args.variant} {cond} rows={len(test)} "
-          f"workers={args.workers} mock={args.mock}\n")
- 
+    subdir = "test" if args.limit and args.limit > 0 else cond
     rows = list(test.iterrows())
  
     def work(item):
@@ -214,8 +212,8 @@ def main():
     test["method"] = tag
     print(f"\nrows={len(test)}  parse/miss failures={fails} ({fails/len(test)*100:.0f}%)")
     summarize(test)
- 
-    out = os.path.join(HERE, f"method_c_{tag}.csv")
+
+    out = os.path.join(HERE, subdir, f"method_c_{tag}.csv")
     cols = ["id", "language", "proverb_native", "proverb_en", "label", "pred", "method"]
     test[[c for c in cols if c in test.columns]].to_csv(out, index=False, encoding="utf-8-sig")
     print(f"\nsaved {out}")

@@ -5,10 +5,11 @@ Trains on the train split, tunes the regularization strength C on the val
 split, then evaluates ONCE on the locked test split. Reports the headline
 macro-F1, per-class metrics, per-language macro-F1, and the dummy baseline.
 
-Reads the shared artifacts produced by 01 (all inside embedding_classifier/):
+Reads the shared artifacts produced by 01 (all inside embedding_classifier/npy/):
     maps_embeddings.npy, train_indices.npy, val_indices.npy, test_indices.npy
 Writes:
-    embedding_classifier/method_a_results.csv      (per-language summary)
+    embedding_classifier/results/method_a_results.csv      (per-language summary)
+    embedding_classifier/results/method_a_predictions.csv  (per-row predictions)
 
 Run:  python embedding_classifier/03_method_a.py
 Requires: pip install scikit-learn
@@ -26,10 +27,10 @@ SEED = 42
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 MASTER = os.path.join(ROOT, "data", "processed", "master.csv")
-EMB   = os.path.join(HERE, "maps_embeddings.npy")
-TRAIN = os.path.join(HERE, "train_indices.npy")
-VAL   = os.path.join(HERE, "val_indices.npy")
-TEST  = os.path.join(HERE, "test_indices.npy")
+EMB   = os.path.join(HERE, "npy", "maps_embeddings.npy")
+TRAIN = os.path.join(HERE, "npy", "train_indices.npy")
+VAL   = os.path.join(HERE, "npy", "val_indices.npy")
+TEST  = os.path.join(HERE, "npy", "test_indices.npy")
 
 # LaBSE is a cosine-geometry encoder, so L2-normalizing the vectors before a
 # linear model is the geometrically correct default and usually helps a little.
@@ -132,13 +133,13 @@ def main():
     pred_df["pred"] = pred
     pred_df["method"] = "MethodA_LaBSE_LogReg"
     pcols = ["id", "language", "proverb_native", "proverb_en", "label", "pred", "method"]
-    pred_path = os.path.join(HERE, "method_a_predictions.csv")
+    pred_path = os.path.join(HERE, "results", "method_a_predictions.csv")
     pred_df[[c for c in pcols if c in pred_df.columns]].to_csv(
         pred_path, index=False, encoding="utf-8-sig")
     print(f"saved {pred_path}")
 
     out = pd.DataFrame(rows)
-    summ = os.path.join(HERE, "method_a_results.csv")
+    summ = os.path.join(HERE, "results", "method_a_results.csv")
     out.to_csv(summ, index=False)
     print(f"saved {summ}")
 

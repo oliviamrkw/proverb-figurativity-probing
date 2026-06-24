@@ -4,12 +4,12 @@
 Builds the train/val/test split on the labeled MAPS rows and the shared LaBSE
 embeddings. Run ONCE (re-run whenever master.csv changes).
 
-ALL artifacts are written INTO the embedding_classifier/ folder (next to this
+ALL artifacts are written INTO the embedding_classifier/npy/ folder (next to this
 script), regardless of where you run from, so every script agrees on locations:
-    embedding_classifier/train_indices.npy
-    embedding_classifier/val_indices.npy
-    embedding_classifier/test_indices.npy
-    embedding_classifier/maps_embeddings.npy
+    embedding_classifier/npy/train_indices.npy
+    embedding_classifier/npy/val_indices.npy
+    embedding_classifier/npy/test_indices.npy
+    embedding_classifier/npy/maps_embeddings.npy
 
 Run:  python embedding_classifier/01_build_split_and_embeddings.py
 """
@@ -24,10 +24,10 @@ SEED = 42
 HERE = os.path.dirname(os.path.abspath(__file__))      # embedding_classifier/
 ROOT = os.path.dirname(HERE)                           # project root
 MASTER = os.path.join(ROOT, "data", "processed", "master.csv")
-EMB   = os.path.join(HERE, "maps_embeddings.npy")
-TRAIN = os.path.join(HERE, "train_indices.npy")
-VAL   = os.path.join(HERE, "val_indices.npy")
-TEST  = os.path.join(HERE, "test_indices.npy")
+EMB   = os.path.join(HERE, "npy", "maps_embeddings.npy")
+TRAIN = os.path.join(HERE, "npy", "train_indices.npy")
+VAL   = os.path.join(HERE, "npy", "val_indices.npy")
+TEST  = os.path.join(HERE, "npy", "test_indices.npy")
 
 
 def load_maps(path=MASTER):

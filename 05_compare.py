@@ -6,8 +6,10 @@ locked test set with identical metrics, and writes a single comparison table
 for the poster. Recompute anytime without re-running any model.
 
 Reads:
-  embedding_classifier/method_a_predictions.csv     (Method A)
-  llm_classifier/method_c_*.csv                      (each Method C run)
+  embedding_classifier/results/method_a_predictions.csv     (Method A)
+  llm_classifier/zero-shot/method_c_*.csv                   (Method C zero-shot)
+  llm_classifier/4-5-shot/method_c_*.csv                    (Method C few-shot)
+  llm_classifier/test/method_c_*.csv                        (Method C pilot runs)
 Only FULL-test-set runs are included; smaller files (pilots) are skipped.
 
 Writes:
@@ -32,7 +34,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = HERE if os.path.isdir(os.path.join(HERE, "embedding_classifier")) else os.path.dirname(HERE)
 EMB_DIR = os.path.join(ROOT, "embedding_classifier")
 LLM_DIR = os.path.join(ROOT, "llm_classifier")
-TEST = os.path.join(EMB_DIR, "test_indices.npy")
+TEST = os.path.join(EMB_DIR, "npy", "test_indices.npy")
 SEED = 42
 
 
@@ -65,10 +67,12 @@ def main():
     print(f"locked test size: {n_expected}\n")
 
     files = []
-    pa = os.path.join(EMB_DIR, "method_a_predictions.csv")
+    pa = os.path.join(EMB_DIR, "results", "method_a_predictions.csv")
     if os.path.exists(pa):
         files.append(pa)
-    files += sorted(glob.glob(os.path.join(LLM_DIR, "method_c_*.csv")))
+    files += sorted(glob.glob(os.path.join(LLM_DIR, "zero-shot", "method_c_*.csv")))
+    files += sorted(glob.glob(os.path.join(LLM_DIR, "4-5-shot", "method_c_*.csv")))
+    files += sorted(glob.glob(os.path.join(LLM_DIR, "test", "method_c_*.csv")))
 
     rows = []
     gold_ref = None

@@ -25,9 +25,9 @@ SEED = 42
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 MASTER = os.path.join(ROOT, "data", "processed", "master.csv")
-EMB   = os.path.join(HERE, "maps_embeddings.npy")
-TRAIN = os.path.join(HERE, "train_indices.npy")
-VAL   = os.path.join(HERE, "val_indices.npy")
+EMB   = os.path.join(HERE, "npy", "maps_embeddings.npy")
+TRAIN = os.path.join(HERE, "npy", "train_indices.npy")
+VAL   = os.path.join(HERE, "npy", "val_indices.npy")
 MIN_ROWS = 20
 
 
