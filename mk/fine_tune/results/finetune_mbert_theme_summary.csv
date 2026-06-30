@@ -1,2 +1,2 @@
 model,level,mean_acc,std_acc
-mbert,theme,0.3378,0.0147
+mbert,theme,0.2462,0.027
